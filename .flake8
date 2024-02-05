@@ -5,4 +5,4 @@ paths =
   ./src
 max-complexity = 10
 exclude =
-  tests
+  tests, .venv, venv, __pycache__
