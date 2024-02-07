@@ -31,9 +31,6 @@ def whats_new(session):
         version_link = urljoin(whats_new_url, version_a_tag['href'])
         try:
             section_soup = get_soup(session, version_link)
-            if section_soup is None:
-                request_errors.append(version_link)
-                continue
             results.append(
                 (
                     version_link,

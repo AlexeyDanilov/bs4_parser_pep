@@ -10,8 +10,10 @@ def get_response(session, url):
         response = session.get(url)
         response.encoding = 'utf-8'
         return response
-    except RequestException:
-        raise
+    except RequestException as e:
+        raise ConnectionError(
+            f'Не удалось сделать запрос к {url}. {e}'
+        )
 
 
 def find_tag(soup, tag, attrs=None):
@@ -23,13 +25,7 @@ def find_tag(soup, tag, attrs=None):
 
 
 def get_soup(session, url):
-    try:
-        response = get_response(session, url)
-        if response is None:
-            return
-    except RequestException:
-        raise
-
+    response = get_response(session, url)
     return BeautifulSoup(response.text, features='lxml')
 
 
@@ -39,5 +35,5 @@ def write_logs(error_data, error_template):
 
     for item in error_data:
         logging.warning(
-            error_template.format(*item if type(item) == 'tuple' else item)
+            error_template.format(*item if isinstance(item, tuple) else item)
         )
